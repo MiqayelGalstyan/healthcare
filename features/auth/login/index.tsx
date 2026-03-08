@@ -14,15 +14,13 @@ import { loginSchema } from "@/helpers/login-helper";
 import { ILoginPayload } from "@/types/interfaces/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { useTheme } from "@/hooks/useTheme";
-import { ThemeEnum } from "@/types/enums";
+import { RouteEnum } from "@/types/enums";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/PasswordInput";
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const { theme } = useTheme();
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -38,12 +36,25 @@ const LoginForm = () => {
     reValidateMode: "onChange",
   });
 
-  const toggleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
+  const onSubmit = async (data: ILoginPayload) => {
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!result?.ok) {
+        console.log("Login failed", result);
+        return;
+      }
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
-  const onSubmit = (data: ILoginPayload) => {
-    console.log(data);
+  const navigateToSignUp = () => {
+    router.push(RouteEnum.SIGNUP);
   };
 
   return (
@@ -85,33 +96,9 @@ const LoginForm = () => {
                   name="password"
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Password"
-                      className="pr-8 "
-                      autoComplete="new-password"
-                    />
+                    <PasswordInput {...field} placeholder="Password" />
                   )}
                 />
-                {showPassword ? (
-                  <EyeOff
-                    className="absolute right-2 cursor-pointer select-none"
-                    width={20}
-                    height={20}
-                    onClick={toggleShowPassword}
-                    color={theme === ThemeEnum.DARK ? "white" : "black"}
-                  />
-                ) : (
-                  <Eye
-                    className="absolute right-2 cursor-pointer select-none"
-                    width={20}
-                    height={20}
-                    onClick={toggleShowPassword}
-                    color={theme === ThemeEnum.DARK ? "white" : "black"}
-                  />
-                )}
               </div>
               {errors.password && (
                 <p className="text-red-600 text-sm font-normal">
@@ -133,7 +120,11 @@ const LoginForm = () => {
       <CardFooter className="flex-col gap-2">
         <p className="text-sm text-muted-foreground text-center">
           Don&apos;t have an account?{" "}
-          <Button className="p-0 cursor-pointer" variant="link">
+          <Button
+            className="p-0 cursor-pointer"
+            variant="link"
+            onClick={navigateToSignUp}
+          >
             Sign Up
           </Button>
         </p>
