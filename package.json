@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "type-check": "tsc"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
