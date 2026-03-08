@@ -1,21 +1,21 @@
-datasource db {
- provider = "postgresql"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
- provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
 }
 
 model User {
- id        String   @id @default(uuid())
- email     String   @unique
- password  String
- role      Role
- createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
 }
 
 enum Role {
- USER
- DOCTOR
- ADMIN
+  USER
+  DOCTOR
+  ADMIN
 }
