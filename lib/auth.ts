@@ -1,60 +1,57 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "./prisma";
-import Credentials from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { RoleEnum, RouteEnum } from "@/types/enums";
 
-export const authOptions = {
-  adapter: PrismaAdapter(prisma),
-
-  session: {
-    strategy: "jwt",
-  },
-
+export default NextAuth({
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials) return null;
+        if (!credentials?.email || !credentials.password) return null;
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
+
         if (!user) return null;
 
         const valid = await bcrypt.compare(credentials.password, user.password);
         if (!valid) return null;
 
-        return user;
+        return {
+          id: user.id,
+          email: user.email,
+          role: RoleEnum[user.role as keyof typeof RoleEnum],
+        };
       },
     }),
   ],
-
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    async jwt({
-      token,
-      user,
-    }: {
-      token: Record<string, never>;
-      user: Record<string, never>;
-    }) {
-      if (user) token.role = user.role;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
       return token;
     },
-    async session({
-      session,
-      token,
-    }: {
-      session: Record<string, Record<string, unknown>>;
-      token: Record<string, never>;
-    }) {
-      if (session.user) session.user.role = token.role;
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as RoleEnum;
+      }
       return session;
     },
   },
-
-  secret: process.env.NEXTAUTH_SECRET,
-};
+  pages: {
+    signIn: RouteEnum.LOGIN,
+  },
+});

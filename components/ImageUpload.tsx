@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+import { Button } from "./ui/button";
 
 interface Props {
   onChange: (filePath: string) => void;
@@ -22,17 +24,29 @@ const ImageUpload = ({ onChange }: Props) => {
 
     const localPreview = URL.createObjectURL(file);
     setPreview(localPreview);
+
+    const fileName = `${Date.now()}-${file.name}`;
+
+    const { error } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, file);
+
+    if (error) throw error;
+
+    // const { data } = supabase.storage
+    //     .from("avatars")
+    //     .getPublicUrl(fileName);
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <button
+      <Button
         type="button"
         onClick={handleButtonClick}
-        className="px-4 py-2 bg-cyan-800 cursor-pointer text-white rounded-md hover:bg-cyan-800"
+        className="px-4 py-2 rounded-md cursor-pointer"
       >
         Upload Image
-      </button>
+      </Button>
       <input
         type="file"
         accept="image/*"

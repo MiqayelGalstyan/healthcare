@@ -1,7 +1,7 @@
 export enum RoleEnum {
-  USER = "user",
-  ADMIN = "admin",
-  DOCTOR = "doctor",
+  USER = "USER",
+  ADMIN = "ADMIN",
+  DOCTOR = "DOCTOR",
 }
 
 export enum RouteEnum {

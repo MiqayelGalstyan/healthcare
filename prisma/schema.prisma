@@ -7,15 +7,64 @@ datasource db {
 }
 
 model User {
+  id                  String         @id @default(uuid())
+  email               String         @unique
+  password            String
+  role                Role           @default(USER)
+  createdAt           DateTime       @default(now())
+  firstName           String
+  lastName            String
+  photo               String?
+  doctorAppointments  Appointment[]  @relation("DoctorAppointments")
+  patientAppointments Appointment[]  @relation("PatientAppointments")
+  doctorProfile       DoctorProfile?
+  reviewsReceived     Review[]       @relation("DoctorReviews")
+  reviewsWritten      Review[]       @relation("PatientReviews")
+}
+
+model DoctorProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  specialization String
+  experience     Int
+  education      String
+  contactInfo    String?
+  workingDays    String[]
+  workingHours   Json
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Appointment {
+  id        String            @id @default(uuid())
+  doctorId  String
+  patientId String
+  date      DateTime
+  status    AppointmentStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+  doctor    User              @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  patient   User              @relation("PatientAppointments", fields: [patientId], references: [id])
+}
+
+model Review {
   id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      Role
+  doctorId  String
+  patientId String
+  rating    Int
+  comment   String?
   createdAt DateTime @default(now())
+  doctor    User     @relation("DoctorReviews", fields: [doctorId], references: [id])
+  patient   User     @relation("PatientReviews", fields: [patientId], references: [id])
 }
 
 enum Role {
   USER
   DOCTOR
   ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }

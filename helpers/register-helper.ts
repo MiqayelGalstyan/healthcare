@@ -1,3 +1,4 @@
+import { SPECIALITY_VALUES } from "@/constants";
 import { RegisterTypeEnum } from "@/types/enums";
 import { z } from "zod";
 
@@ -10,7 +11,7 @@ const patientSchema = z
     confirmPassword: z
       .string()
       .min(6, "Password must be at least 6 characters"),
-    photo: z.any().optional(),
+    photo: z.string().min(1, "Photo is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",
@@ -18,8 +19,14 @@ const patientSchema = z
   });
 
 const doctorSchema = patientSchema.extend({
-  specialization: z.string().min(1, "Specialization is required"),
-  experience: z.number().min(0, "Experience is required"),
+  specialization: z
+    .object({
+      value: z.string(),
+      label: z.string(),
+    })
+    .transform((obj) => obj.value) // keep only the value
+    .refine((val) => SPECIALITY_VALUES.includes(val), "Specialization is required"),
+  experience: z.string().min(1, "Experience is required"),
   education: z.string().min(1, "Education is required"),
   workingDays: z.array(z.string()).min(1, "Select at least one working day"),
   workingHours: z
@@ -31,6 +38,7 @@ const doctorSchema = patientSchema.extend({
       }),
     )
     .optional(),
+  contactInformation: z.string().min(1, "Contact information is required"),
 });
 
 export const registerSchema = (currentType: RegisterTypeEnum) =>

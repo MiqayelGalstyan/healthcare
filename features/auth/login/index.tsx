@@ -91,7 +91,7 @@ const LoginForm = () => {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
-              <div className="relative w-full flex flex-col justify-center items-center">
+              <div className="relative w-full">
                 <Controller
                   name="password"
                   control={control}
