@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
+import type { NextAuthOptions } from "next-auth";
+import { prisma } from "./prisma";
 import bcrypt from "bcrypt";
-import { RoleEnum, RouteEnum } from "@/types/enums";
+import { RoleEnum } from "@/types/enums";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -51,7 +51,4 @@ export default NextAuth({
       return session;
     },
   },
-  pages: {
-    signIn: RouteEnum.LOGIN,
-  },
-});
+};
