@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { BookingConfirmButton } from "./BookingConfirmButton";
-import { Button } from "@/components/ui/button";
 
 export default async function BookingConfirmationPage({
   params,
@@ -56,7 +55,6 @@ export default async function BookingConfirmationPage({
 
       <div className="rounded-2xl border border-border bg-card overflow-hidden">
         <div className="p-6 space-y-6">
-          {/* Doctor */}
           <section>
             <h2 className="text-sm font-medium text-muted-foreground mb-2">
               Doctor

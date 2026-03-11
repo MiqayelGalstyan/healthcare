@@ -5,7 +5,6 @@ const AdminDoctorsPage = () => {
       <p className="mb-2">
         Here admin will add, edit, delete, and confirm doctors.
       </p>
-      {/* TODO: implement doctors management table + actions */}
     </div>
   );
 };

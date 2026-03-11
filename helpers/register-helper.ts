@@ -29,7 +29,7 @@ const doctorSchema = patientSchema.extend({
       value: z.string(),
       label: z.string(),
     })
-    .transform((obj) => obj.value) // keep only the value
+    .transform((obj) => obj.value)
     .refine(
       (val) => SPECIALITY_VALUES.includes(val),
       "Specialization is required",

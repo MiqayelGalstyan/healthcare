@@ -16,7 +16,6 @@ function formatMinutesToTime(minutes: number): string {
   return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 }
 
-/** Generate slots from startTime to endTime (end exclusive), every intervalMinutes. */
 export function generateTimeSlots(
   startTime: string,
   endTime: string,
@@ -31,7 +30,6 @@ export function generateTimeSlots(
   return slots;
 }
 
-/** True if slot time has passed on the given date (e.g. today). */
 function isSlotExpired(slotTime: string, date: Date): boolean {
   const [h, m] = slotTime.split(":").map(Number);
   const slotDate = new Date(date);
@@ -42,13 +40,10 @@ function isSlotExpired(slotTime: string, date: Date): boolean {
 interface TimeSlotPickerProps {
   selectedTime: string | null;
   onSelectTime: (time: string) => void;
-  /** When set, slots are generated from start to end every intervalMinutes. */
   startTime?: string;
   endTime?: string;
   intervalMinutes?: number;
-  /** When set (e.g. today), slots in the past are disabled. */
   selectedDate?: Date;
-  /** Pre-computed slots; used when startTime/endTime are not provided. */
   availableSlots?: string[];
 }
 

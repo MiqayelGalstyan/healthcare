@@ -5,7 +5,6 @@ const AdminPatientsPage = () => {
       <p className="mb-2">
         Here admin will see and manage registered patients.
       </p>
-      {/* TODO: implement patients management table */}
     </div>
   );
 };

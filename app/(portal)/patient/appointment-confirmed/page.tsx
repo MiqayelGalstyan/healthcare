@@ -7,7 +7,6 @@ export default function AppointmentConfirmedPage() {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 py-12">
       <div className="max-w-md w-full text-center space-y-6">
-        {/* Cheque-style success: slip shape with border and check stamp */}
         <div
           className="mx-auto w-28 h-20 rounded-lg border-2 border-green-600 bg-green-50 dark:bg-green-950/40 flex items-center justify-center shadow-md relative overflow-hidden"
           aria-hidden

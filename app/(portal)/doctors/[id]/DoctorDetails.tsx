@@ -33,8 +33,6 @@ const DoctorDetails = ({ doctor }: Props) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-
-              {/* Doctor Info */}
               <div className="p-6">
                 <h1
                   className={`text-2xl font-bold ${theme === ThemeEnum.LIGHT ? "text-gray-900" : "text-white"} mb-2`}

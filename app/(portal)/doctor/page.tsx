@@ -5,7 +5,6 @@ const DoctorProfilePage = () => {
       <p className="mb-2">
         Here you will manage your working hours and see booked patients.
       </p>
-      {/* TODO: implement schedule editor + booked patients table */}
     </div>
   );
 };
