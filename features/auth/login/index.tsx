@@ -14,8 +14,8 @@ import { loginSchema } from "@/helpers/login-helper";
 import { ILoginPayload } from "@/types/interfaces/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { RouteEnum } from "@/types/enums";
-import { signIn } from "next-auth/react";
+import { RoleEnum, RouteEnum } from "@/types/enums";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/PasswordInput";
 
@@ -25,7 +25,7 @@ const LoginForm = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ILoginPayload>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -45,9 +45,16 @@ const LoginForm = () => {
       });
 
       if (!result?.ok) {
-        console.log("Login failed", result);
         return;
       }
+
+      const session = await getSession();
+
+      const route =
+        session?.user?.role === RoleEnum.PATIENT
+          ? RouteEnum.PATIENT
+          : RouteEnum.DASHBOARD;
+      router.push(route);
     } catch (error) {
       console.log(error, "error");
     }
@@ -111,9 +118,9 @@ const LoginForm = () => {
             type="submit"
             variant="outline"
             className="w-full cursor-pointer mt-8"
-            disabled={!!errors.email || !!errors.password}
+            disabled={!!errors.email || !!errors.password || isSubmitting}
           >
-            Login
+            {isSubmitting ? "Please wait..." : "Login"}
           </Button>
         </form>
       </CardContent>

@@ -5,10 +5,10 @@ export interface IRegisterPayload {
   firstName: string;
   lastName: string;
   photo: string;
-  specialization?: null | { value: string; label: string };
+  specialty?: null | { value: string; label: string };
   experience?: string;
   education?: string;
   workingDays?: string[];
   workingHours?: { [day: string]: { start: string; end: string } };
-  contactInformation?: string;
+  bio?: string;
 }

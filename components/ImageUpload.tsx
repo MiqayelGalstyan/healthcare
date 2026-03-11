@@ -20,12 +20,10 @@ const ImageUpload = ({ onChange }: Props) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    onChange(file.name);
+    const fileName = `${Date.now()}-${file.name}`;
 
     const localPreview = URL.createObjectURL(file);
     setPreview(localPreview);
-
-    const fileName = `${Date.now()}-${file.name}`;
 
     const { error } = await supabase.storage
       .from("avatars")
@@ -33,9 +31,7 @@ const ImageUpload = ({ onChange }: Props) => {
 
     if (error) throw error;
 
-    // const { data } = supabase.storage
-    //     .from("avatars")
-    //     .getPublicUrl(fileName);
+    onChange(fileName);
   };
 
   return (

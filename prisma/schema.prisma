@@ -6,58 +6,96 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model Patient {
   id                  String         @id @default(uuid())
   email               String         @unique
   password            String
-  role                Role           @default(USER)
+  role                Role           @default(PATIENT)
   createdAt           DateTime       @default(now())
+
   firstName           String
   lastName            String
   photo               String?
+
+  doctorProfile       DoctorProfile?
+
   doctorAppointments  Appointment[]  @relation("DoctorAppointments")
   patientAppointments Appointment[]  @relation("PatientAppointments")
-  doctorProfile       DoctorProfile?
+
   reviewsReceived     Review[]       @relation("DoctorReviews")
   reviewsWritten      Review[]       @relation("PatientReviews")
 }
 
 model DoctorProfile {
-  id             String   @id @default(uuid())
-  userId         String   @unique
-  specialization String
-  experience     Int
-  education      String
-  contactInfo    String?
-  workingDays    String[]
-  workingHours   Json
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String        @id @default(uuid())
+  patientId    String        @unique
+
+  bio          String?
+  experience   Int
+  education    String?
+  rating       Float         @default(0)
+  price        Float
+
+  specialtyId  String
+  specialty    Specialty     @relation(fields: [specialtyId], references: [id])
+
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  availabilities Availability[]
+}
+
+model Specialty {
+  id       String           @id @default(uuid())
+  name     String           @unique
+
+  doctors  DoctorProfile[]
+}
+
+model Availability {
+  id        String   @id @default(uuid())
+
+  doctorId  String
+  doctor    DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  dayOfWeek Int
+  startTime String
+  endTime   String
 }
 
 model Appointment {
   id        String            @id @default(uuid())
+
   doctorId  String
   patientId String
-  date      DateTime
+
+  slotTime  DateTime
+  notes     String?
+
   status    AppointmentStatus @default(PENDING)
+
   createdAt DateTime          @default(now())
-  doctor    User              @relation("DoctorAppointments", fields: [doctorId], references: [id])
-  patient   User              @relation("PatientAppointments", fields: [patientId], references: [id])
+
+  doctor    Patient           @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  patient   Patient           @relation("PatientAppointments", fields: [patientId], references: [id])
 }
 
 model Review {
   id        String   @id @default(uuid())
+
   doctorId  String
   patientId String
+
   rating    Int
   comment   String?
+
   createdAt DateTime @default(now())
-  doctor    User     @relation("DoctorReviews", fields: [doctorId], references: [id])
-  patient   User     @relation("PatientReviews", fields: [patientId], references: [id])
+
+  doctor    Patient  @relation("DoctorReviews", fields: [doctorId], references: [id])
+  patient   Patient  @relation("PatientReviews", fields: [patientId], references: [id])
 }
 
 enum Role {
-  USER
+  PATIENT
   DOCTOR
   ADMIN
 }

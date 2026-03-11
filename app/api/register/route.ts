@@ -1,3 +1,4 @@
+import { convertDay } from "@/helpers/convert-day";
 import { prisma } from "@/lib/prisma";
 import { RoleEnum } from "@/types/enums";
 import bcrypt from "bcrypt";
@@ -13,55 +14,82 @@ export async function POST(req: Request) {
       lastName,
       photo,
       role,
-      specialization,
+      specialty,
       experience,
       education,
       workingDays,
       workingHours,
-      contactInformation,
+      bio,
     } = body;
 
+    const typedWorkingDays = Array.isArray(workingDays) ? workingDays : [];
+
     if (!email || !password || !firstName || !lastName) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    const existingPatient = await prisma.patient.findUnique({
+      where: { email },
+    });
+    if (existingPatient) {
+      return NextResponse.json(
+        { error: "Patient already exists" },
+        { status: 400 },
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userData: Record<string, unknown> = {
+    const patientData: Record<string, unknown> = {
       email,
       password: hashedPassword,
       firstName,
       lastName,
       photo,
       role,
-    }
+    };
 
     if (role === RoleEnum.DOCTOR) {
-      userData.doctorProfile = {
+      patientData.doctorProfile = {
         create: {
-          specialization: specialization?.value ?? "",
+          specialty: {
+            connectOrCreate: {
+              where: {
+                name: specialty,
+              },
+              create: {
+                name: specialty,
+              },
+            },
+          },
           experience: experience ? Number(experience) : 0,
           education: education ?? "",
-          workingDays: workingDays ?? [],
-          workingHours: workingHours ?? {},
-          contactInfo: contactInformation ?? "",
+          bio: bio ?? "",
+          price: 0,
+          availabilities: {
+            create:
+              typedWorkingDays?.map((day) => ({
+                dayOfWeek: convertDay(day),
+                startTime: workingHours?.[day]?.start ?? "09:00",
+                endTime: workingHours?.[day]?.end ?? "17:00",
+              })) ?? [],
+          },
         },
-      }
+      };
     }
 
-    const user = await prisma.user.create({
-      data: userData as unknown as Parameters<typeof prisma.user.create>[0]["data"],
+    const patient = await prisma.patient.create({
+      data: patientData as unknown as Parameters<
+        typeof prisma.patient.create
+      >[0]["data"],
     });
 
-    return NextResponse.json(user);
+    return NextResponse.json(patient);
   } catch (error) {
     console.error("Registration error:", error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
-
 }

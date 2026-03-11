@@ -7,7 +7,12 @@ const patientSchema = z
     firstName: z.string().min(1, "First name is required"),
     lastName: z.string().min(1, "Last name is required"),
     email: z.string().email("Invalid email"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/\d/, "Password must contain at least one number"),
     confirmPassword: z
       .string()
       .min(6, "Password must be at least 6 characters"),
@@ -19,13 +24,16 @@ const patientSchema = z
   });
 
 const doctorSchema = patientSchema.extend({
-  specialization: z
+  specialty: z
     .object({
       value: z.string(),
       label: z.string(),
     })
     .transform((obj) => obj.value) // keep only the value
-    .refine((val) => SPECIALITY_VALUES.includes(val), "Specialization is required"),
+    .refine(
+      (val) => SPECIALITY_VALUES.includes(val),
+      "Specialization is required",
+    ),
   experience: z.string().min(1, "Experience is required"),
   education: z.string().min(1, "Education is required"),
   workingDays: z.array(z.string()).min(1, "Select at least one working day"),
@@ -38,7 +46,7 @@ const doctorSchema = patientSchema.extend({
       }),
     )
     .optional(),
-  contactInformation: z.string().min(1, "Contact information is required"),
+  bio: z.string().min(1, "Bio is required"),
 });
 
 export const registerSchema = (currentType: RegisterTypeEnum) =>

@@ -1,12 +1,18 @@
-import { Button } from "@/components/ui/button";
+import { authOptions } from "@/lib/auth";
+import { RoleEnum, RouteEnum } from "@/types/enums";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col min-h-screen items-center justify-center bg-white font-sans">
-      <p className="font-bold text-black text-2xl text-center">Home</p>
-      <Button variant={"outline"} className="pointer-events-auto">
-        Click
-      </Button>
-    </div>
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect(RouteEnum.LOGIN);
+  }
+
+  redirect(
+    session.user.role === RoleEnum.PATIENT
+      ? RouteEnum.PATIENT
+      : RouteEnum.DASHBOARD,
   );
 }
