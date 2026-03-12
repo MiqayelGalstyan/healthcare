@@ -23,6 +23,7 @@ const FindDoctors = ({ doctors }: Props) => {
   const [filteredDoctors, setFilteredDoctors] =
     useState<IFoundDoctor[]>(doctors);
   const [specialty, setSpecialty] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
@@ -35,6 +36,7 @@ const FindDoctors = ({ doctors }: Props) => {
           .toLowerCase()
           .includes(searchValue.toLowerCase()),
     );
+    setSearch(searchValue);
     setFilteredDoctors(filtered);
   };
 
@@ -51,6 +53,7 @@ const FindDoctors = ({ doctors }: Props) => {
   const onReset = () => {
     setSpecialty(null);
     setFilteredDoctors(doctors);
+    setSearch("");
   };
 
   return (
@@ -61,6 +64,7 @@ const FindDoctors = ({ doctors }: Props) => {
           placeholder="Search doctors"
           onChange={handleSearch}
           className="w-full"
+          value={search}
         />
         <Select
           key={specialty ?? "none"}
@@ -86,9 +90,11 @@ const FindDoctors = ({ doctors }: Props) => {
             ))}
           </SelectContent>
         </Select>
-        <div className="rounded-full bg-muted p-2" onClick={() => onReset()}>
-          <X size={20} className="cursor-pointer" />
-        </div>
+        {(search || specialty) && (
+          <div className="rounded-full bg-muted p-2" onClick={() => onReset()}>
+            <X size={20} className="cursor-pointer" />
+          </div>
+        )}
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredDoctors.map((doctor) => (
