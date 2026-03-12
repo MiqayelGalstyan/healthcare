@@ -34,22 +34,32 @@ export function DoctorBookedPatients({
 
   const router = useRouter();
 
-  const updateStatus = async (appointmentId: string, status: AppointmentStatusEnum.CONFIRMED | AppointmentStatusEnum.CANCELLED) => {
+  const updateStatus = async (
+    appointmentId: string,
+    status: AppointmentStatusEnum.CONFIRMED | AppointmentStatusEnum.CANCELLED,
+  ) => {
     setUpdatingId(appointmentId);
     try {
-      const res = await fetch(`/api/doctor/appointments/${appointmentId}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
+      const res = await fetch(
+        `/api/doctor/appointments/${appointmentId}/status`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        },
+      );
       if (!res.ok) throw new Error("Failed to update");
       setAppointments((prev) =>
-        prev.map((a) => (a.id === appointmentId ? { ...a, status } : a))
+        prev.map((a) => (a.id === appointmentId ? { ...a, status } : a)),
       );
       toast.success("Appointment status updated.");
       router.refresh();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update appointment status.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to update appointment status.",
+      );
     } finally {
       setUpdatingId(null);
     }
@@ -61,9 +71,7 @@ export function DoctorBookedPatients({
         <h1 className="text-2xl font-semibold mb-2">Dashboard</h1>
         <div className="mt-2 flex items-center gap-1.5 text-sm mb-4">
           <Star className="w-4 h-4 fill-amber-400 text-amber-400 shrink-0" />
-          <span className="font-medium">
-            Your rating: {rating.toFixed(1)}
-          </span>
+          <span className="font-medium">Your rating: {rating.toFixed(1)}</span>
         </div>
         <p className="text-muted-foreground">Your booked patients.</p>
       </div>
@@ -91,10 +99,14 @@ export function DoctorBookedPatients({
             const isUpdating = updatingId === apt.id;
 
             const statusStyles: Record<AppointmentStatus, string> = {
-              PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-300",
-              CONFIRMED: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-300",
-              CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-300",
-              COMPLETED: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 border-green-300",
+              PENDING:
+                "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-300",
+              CONFIRMED:
+                "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-300",
+              CANCELLED:
+                "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-300",
+              COMPLETED:
+                "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 border-green-300",
             };
 
             return (
@@ -118,7 +130,9 @@ export function DoctorBookedPatients({
                         size="sm"
                         variant="outline"
                         disabled={isUpdating}
-                        onClick={() => updateStatus(apt.id, AppointmentStatusEnum.CONFIRMED)}
+                        onClick={() =>
+                          updateStatus(apt.id, AppointmentStatusEnum.CONFIRMED)
+                        }
                         className="cursor-pointer"
                       >
                         Confirm
@@ -127,7 +141,9 @@ export function DoctorBookedPatients({
                         size="sm"
                         variant="destructive"
                         disabled={isUpdating}
-                        onClick={() => updateStatus(apt.id, AppointmentStatusEnum.CANCELLED)}
+                        onClick={() =>
+                          updateStatus(apt.id, AppointmentStatusEnum.CANCELLED)
+                        }
                         className="cursor-pointer"
                       >
                         Cancel

@@ -12,7 +12,7 @@ const ALLOWED_STATUSES: AppointmentStatus[] = [
 
 export async function PATCH(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -34,7 +34,7 @@ export async function PATCH(
   if (!ALLOWED_STATUSES.includes(status)) {
     return NextResponse.json(
       { error: "Status must be CONFIRMED or CANCELLED" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -43,7 +43,10 @@ export async function PATCH(
   });
 
   if (!appointment) {
-    return NextResponse.json({ error: "Appointment not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Appointment not found" },
+      { status: 404 },
+    );
   }
   if (appointment.doctorId !== session.user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -51,13 +54,13 @@ export async function PATCH(
   if (appointment.status !== AppointmentStatus.PENDING) {
     return NextResponse.json(
       { error: "Only PENDING appointments can be updated" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (new Date(appointment.slotTime) <= new Date()) {
     return NextResponse.json(
       { error: "Cannot update past appointments" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

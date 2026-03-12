@@ -84,10 +84,15 @@ export function PatientAppointmentsList({
     setOpen(true);
   };
 
+  console.log(appointments, "appointments");
 
-  console.log(appointments, 'appointments')
-
-  const submitReview = async ({ rating, comment }: { rating: number; comment: string }) => {
+  const submitReview = async ({
+    rating,
+    comment,
+  }: {
+    rating: number;
+    comment: string;
+  }) => {
     if (!selectedDoctor || rating < 1 || rating > 5) return;
     try {
       const res = await fetch("/api/reviews", {
@@ -123,7 +128,10 @@ export function PatientAppointmentsList({
             <SheetTitle>Rate {selectedDoctor?.name ?? "doctor"}</SheetTitle>
           </SheetHeader>
           {selectedDoctor && (
-            <form onSubmit={handleSubmit(submitReview)} className="space-y-6 py-6 px-6">
+            <form
+              onSubmit={handleSubmit(submitReview)}
+              className="space-y-6 py-6 px-6"
+            >
               <div>
                 <Label>Rating (1–5)</Label>
                 <div className="flex gap-2 mt-2">
@@ -131,14 +139,17 @@ export function PatientAppointmentsList({
                     <button
                       key={n}
                       type="button"
-                      onClick={() => setValue("rating", n, { shouldValidate: true })}
+                      onClick={() =>
+                        setValue("rating", n, { shouldValidate: true })
+                      }
                       className="rounded p-2 border hover:bg-muted focus:ring-0 select-none"
                     >
                       <Star
-                        className={`w-6 h-6 ${n <= rating
-                          ? "fill-amber-400 text-amber-400"
-                          : "text-muted-foreground"
-                          }`}
+                        className={`w-6 h-6 ${
+                          n <= rating
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-muted-foreground"
+                        }`}
                       />
                     </button>
                   ))}

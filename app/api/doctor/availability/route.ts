@@ -21,7 +21,13 @@ export async function PUT(req: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  let body: { availabilities: Array<{ dayOfWeek: number; startTime: string; endTime: string }> };
+  let body: {
+    availabilities: Array<{
+      dayOfWeek: number;
+      startTime: string;
+      endTime: string;
+    }>;
+  };
   try {
     body = await req.json();
   } catch {
@@ -32,7 +38,7 @@ export async function PUT(req: Request) {
   if (!Array.isArray(availabilities)) {
     return NextResponse.json(
       { error: "availabilities must be an array" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -46,13 +52,13 @@ export async function PUT(req: Request) {
     ) {
       return NextResponse.json(
         { error: "Each item must have dayOfWeek (0-6), startTime, endTime" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     if (!parseTime(a.startTime) || !parseTime(a.endTime)) {
       return NextResponse.json(
         { error: "startTime and endTime must be HH:mm" },
-        { status: 400 }
+        { status: 400 },
       );
     }
   }
@@ -61,7 +67,10 @@ export async function PUT(req: Request) {
     where: { patientId: session.user.id },
   });
   if (!doctor) {
-    return NextResponse.json({ error: "Doctor profile not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Doctor profile not found" },
+      { status: 404 },
+    );
   }
 
   await prisma.$transaction([
@@ -74,7 +83,7 @@ export async function PUT(req: Request) {
           startTime: a.startTime,
           endTime: a.endTime,
         },
-      })
+      }),
     ),
   ]);
 

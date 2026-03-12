@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
   type ColumnDef,
+  type RowData,
 } from "@tanstack/react-table";
 import { daysOfWeek, DEFAULT_TIME_SLOTS } from "@/constants";
 import { convertDay } from "@/helpers/convert-day";
@@ -35,7 +36,10 @@ export function AvailabilityEditor({
   initial: Array<{ dayOfWeek: number; startTime: string; endTime: string }>;
 }) {
   const byDay = new Map(
-    initial.map((a) => [a.dayOfWeek, { startTime: a.startTime, endTime: a.endTime }])
+    initial.map((a) => [
+      a.dayOfWeek,
+      { startTime: a.startTime, endTime: a.endTime },
+    ]),
   );
 
   const [saving, setSaving] = useState<boolean>(false);
@@ -51,12 +55,15 @@ export function AvailabilityEditor({
         endTime: existing?.endTime ?? DEFAULT_TIME_SLOTS.end,
         enabled: existing != null,
       };
-    })
+    }),
   );
 
   const initialRows = useMemo(() => {
     const byDayMap = new Map(
-      initial.map((a) => [a.dayOfWeek, { startTime: a.startTime, endTime: a.endTime }])
+      initial.map((a) => [
+        a.dayOfWeek,
+        { startTime: a.startTime, endTime: a.endTime },
+      ]),
     );
     return daysOfWeek.map((dayName) => {
       const dayOfWeek = convertDay(dayName);
@@ -77,20 +84,20 @@ export function AvailabilityEditor({
   const toggleDay = (dayOfWeek: number) => {
     setRows((prev) =>
       prev.map((r) =>
-        r.dayOfWeek === dayOfWeek ? { ...r, enabled: !r.enabled } : r
-      )
+        r.dayOfWeek === dayOfWeek ? { ...r, enabled: !r.enabled } : r,
+      ),
     );
   };
 
   const updateTime = (
     dayOfWeek: number,
     field: "startTime" | "endTime",
-    value: string
+    value: string,
   ) => {
     setRows((prev) =>
       prev.map((r) =>
-        r.dayOfWeek === dayOfWeek ? { ...r, [field]: value } : r
-      )
+        r.dayOfWeek === dayOfWeek ? { ...r, [field]: value } : r,
+      ),
     );
   };
 
@@ -112,9 +119,11 @@ export function AvailabilityEditor({
             <Input
               type="time"
               value={r.startTime}
-              onChange={(e) => updateTime(r.dayOfWeek, "startTime", e.target.value)}
+              onChange={(e) =>
+                updateTime(r.dayOfWeek, "startTime", e.target.value)
+              }
               disabled={!r.enabled}
-              className="w-32"
+              className="w-32 dark:[&::-webkit-calendar-picker-indicator]:invert"
             />
           );
         },
@@ -128,16 +137,18 @@ export function AvailabilityEditor({
             <Input
               type="time"
               value={r.endTime}
-              onChange={(e) => updateTime(r.dayOfWeek, "endTime", e.target.value)}
+              onChange={(e) =>
+                updateTime(r.dayOfWeek, "endTime", e.target.value)
+              }
               disabled={!r.enabled}
-              className="w-32"
+              className="w-32 dark:[&::-webkit-calendar-picker-indicator]:invert"
             />
           );
         },
       },
       {
         id: "working",
-        header: "",
+        header: "Working",
         cell: ({ row }) => {
           const r = row.original;
           return (
@@ -150,7 +161,7 @@ export function AvailabilityEditor({
         },
       },
     ],
-    [rows]
+    [rows],
   );
 
   const table = useReactTable({
@@ -183,7 +194,9 @@ export function AvailabilityEditor({
       setLastSaved(rows.map((r) => ({ ...r })));
       toast.success("Timeslots updated.");
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to update timeslots.");
+      toast.error(
+        e instanceof Error ? e.message : "Failed to update timeslots.",
+      );
     } finally {
       setSaving(false);
     }
@@ -192,7 +205,7 @@ export function AvailabilityEditor({
   return (
     <div className="space-y-4">
       <div className="w-full flex justify-end items-center mb-8">
-        <Button onClick={save} disabled={saving || !hasEdits} className="cursor-pointer">
+        <Button onClick={save} disabled={saving || !hasEdits}>
           {saving ? "Saving..." : "Save timeslots"}
         </Button>
       </div>
@@ -225,30 +238,42 @@ export function AvailabilityEditor({
                     {cell.column.id === "working" ? (
                       <Checkbox
                         checked={row.original.enabled}
-                        onCheckedChange={() => toggleDay(row.original.dayOfWeek)}
+                        onCheckedChange={() =>
+                          toggleDay(row.original.dayOfWeek)
+                        }
                         aria-label={`${row.original.dayName} working`}
                       />
                     ) : cell.column.id === "dayName" ? (
-                      <span className="font-medium">{row.original.dayName}</span>
+                      <span className="font-medium">
+                        {row.original.dayName}
+                      </span>
                     ) : cell.column.id === "startTime" ? (
                       <Input
                         type="time"
                         value={row.original.startTime}
                         onChange={(e) =>
-                          updateTime(row.original.dayOfWeek, "startTime", e.target.value)
+                          updateTime(
+                            row.original.dayOfWeek,
+                            "startTime",
+                            e.target.value,
+                          )
                         }
                         disabled={!row.original.enabled}
-                        className="w-32"
+                        className="w-32 dark:[&::-webkit-calendar-picker-indicator]:invert"
                       />
                     ) : cell.column.id === "endTime" ? (
                       <Input
                         type="time"
                         value={row.original.endTime}
                         onChange={(e) =>
-                          updateTime(row.original.dayOfWeek, "endTime", e.target.value)
+                          updateTime(
+                            row.original.dayOfWeek,
+                            "endTime",
+                            e.target.value,
+                          )
                         }
                         disabled={!row.original.enabled}
-                        className="w-32"
+                        className="w-32 dark:[&::-webkit-calendar-picker-indicator]:invert"
                       />
                     ) : null}
                   </TableCell>

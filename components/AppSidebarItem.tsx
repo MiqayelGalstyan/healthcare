@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Stethoscope, User, Users, Clock9 } from "lucide-react";
+import {
+  LayoutDashboard,
+  Stethoscope,
+  User,
+  Users,
+  Clock9,
+} from "lucide-react";
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 
 type IconKey = "dashboard" | "stethoscope" | "user" | "users" | "clock9";
@@ -48,4 +54,3 @@ export function AppSidebarItem({ href, label, icon }: Props) {
     </SidebarMenuItem>
   );
 }
-

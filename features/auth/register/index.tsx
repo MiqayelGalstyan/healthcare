@@ -30,10 +30,17 @@ interface Props {
   children?: ReactNode;
   type: RegisterTypeEnum | undefined;
   onSubmit: (data: IRegisterPayload) => void;
+  isSignInButtonVisible?: boolean;
+  cardStyles?: string;
 }
 
-const RegisterForm = ({ children, type, onSubmit }: Props) => {
-
+const RegisterForm = ({
+  children,
+  type,
+  onSubmit,
+  isSignInButtonVisible = true,
+  cardStyles = "",
+}: Props) => {
   const {
     handleSubmit,
     control,
@@ -91,12 +98,10 @@ const RegisterForm = ({ children, type, onSubmit }: Props) => {
     };
   }, [password]);
 
-  console.log(errors, "errors");
-
   return (
     <div className="flex justify-between items-start gap-10">
       {children}
-      <Card className="flex-2 p-6">
+      <Card className={`flex-2 p-6 ${cardStyles} `}>
         <CardTitle>
           {!type
             ? "Please select account type to proceed"
@@ -447,17 +452,21 @@ const RegisterForm = ({ children, type, onSubmit }: Props) => {
             )}
           </div>
         </form>
-        <div className={`text-sm font-bold flex justify-center ${theme === ThemeEnum.DARK ? "text-muted-foreground" : "text-black"}  items-center gap-2`}>
-          {" "}
-          Already have an account?{" "}
-          <Link
-            className={`inline-block ${theme === ThemeEnum.DARK ? "text-white" : "text-black"} hover:underline`}
-            href={RouteEnum.LOGIN}
+        {isSignInButtonVisible && (
+          <div
+            className={`text-sm font-bold flex justify-center ${theme === ThemeEnum.DARK ? "text-muted-foreground" : "text-black"}  items-center gap-2`}
           >
             {" "}
-            Sign in
-          </Link>
-        </div>
+            Already have an account?{" "}
+            <Link
+              className={`inline-block ${theme === ThemeEnum.DARK ? "text-white" : "text-black"} hover:underline`}
+              href={RouteEnum.LOGIN}
+            >
+              {" "}
+              Sign in
+            </Link>
+          </div>
+        )}
       </Card>
     </div>
   );

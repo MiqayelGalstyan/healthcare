@@ -29,7 +29,6 @@ export enum RegisterTypeEnum {
   DOCTOR = "doctor",
 }
 
-
 export enum AppointmentStatusEnum {
   PENDING = "PENDING",
   CONFIRMED = "CONFIRMED",

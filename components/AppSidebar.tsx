@@ -39,7 +39,7 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
               label: "Dashboard",
               icon: "dashboard",
             },
-            { href: RouteEnum.DOCTOR, label: "Working hours (timeslots)", icon: "clock9" },
+            { href: RouteEnum.DOCTOR, label: "Working hours", icon: "clock9" },
           ]
         : role === RoleEnum.PATIENT
           ? [

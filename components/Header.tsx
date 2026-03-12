@@ -14,7 +14,7 @@ const Header = () => {
   const role = session?.user.role;
   const showSidebar = role === RoleEnum.ADMIN || role === RoleEnum.DOCTOR;
 
-  const imageUrl = getPublicAvatarUrl(session?.user?.photo)
+  const imageUrl = getPublicAvatarUrl(session?.user?.photo);
 
   return (
     <header className="flex h-20 shrink-0 justify-between items-center gap-2 border-b pr-10">
@@ -37,7 +37,7 @@ const Header = () => {
         {imageUrl && (
           <img
             src={imageUrl}
-            alt={session?.user?.firstName ?? 'User'}
+            alt={session?.user?.firstName ?? "User"}
             width={35}
             height={35}
             className="rounded-full"

@@ -25,5 +25,10 @@ export const SPECIALITY_VALUES = DOCTOR_SPECIALITIES.map((s) => s.value) as [
   ...string[],
 ];
 
-
 export const DEFAULT_TIME_SLOTS = { start: "09:00", end: "17:00" };
+
+export const dataTableConfig = {
+  initialPage: 1,
+  initialPageSize: 20,
+  pageSizeOptions: [20, 50, 100],
+};

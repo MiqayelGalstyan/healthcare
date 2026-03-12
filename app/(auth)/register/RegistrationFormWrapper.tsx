@@ -81,9 +81,7 @@ const RegistrationFormWrapper = () => {
             </div>
             <div
               className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
-                currentType === RegisterTypeEnum.DOCTOR
-                  ? actualBorderColor
-                  : ""
+                currentType === RegisterTypeEnum.DOCTOR ? actualBorderColor : ""
               }`}
               onClick={() => setCurrentType(RegisterTypeEnum.DOCTOR)}
             >

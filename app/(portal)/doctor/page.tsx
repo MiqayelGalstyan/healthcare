@@ -27,9 +27,12 @@ export default async function DoctorProfilePage() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-lg font-semibold mb-4">Working hours (timeslots)</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Working hours (timeslots)
+        </h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Set start and end time for each day you see patients. Enable the days you work.
+          Set start and end time for each day you see patients. Enable the days
+          you work.
         </p>
         <AvailabilityEditor initial={availabilities} />
       </section>

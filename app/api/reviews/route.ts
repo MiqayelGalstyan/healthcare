@@ -27,13 +27,13 @@ export async function POST(req: Request) {
   if (!doctorId || typeof rating !== "number") {
     return NextResponse.json(
       { error: "doctorId and rating are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
   if (rating < MIN_RATING || rating > MAX_RATING) {
     return NextResponse.json(
       { error: `rating must be between ${MIN_RATING} and ${MAX_RATING}` },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
   if (existing) {
     return NextResponse.json(
       { error: "You have already reviewed this doctor" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   if (!completedAppointment) {
     return NextResponse.json(
       { error: "You can only review doctors after a completed appointment" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
