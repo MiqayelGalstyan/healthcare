@@ -8,7 +8,6 @@ import Logo from "./Logo";
 import Logout from "./Logout";
 import Link from "next/link";
 import { getPublicAvatarUrl } from "@/lib/supabaseStorage";
-import Image from "next/image";
 
 const Header = () => {
   const { data: session } = useSession();
@@ -30,9 +29,9 @@ const Header = () => {
       </div>
       {!showSidebar && <Link href={RouteEnum.DOCTORS}>Find Doctors</Link>}
       <div className="flex justify-start items-center gap-5">
-        {session?.user?.firstName && (
+        {session?.user?.firstName && session?.user?.lastName && (
           <p className="text-muted-foreground text-nowrap">
-            Hi, {session?.user.firstName}
+            Hi, {session.user.firstName} {session.user.lastName}
           </p>
         )}
         {imageUrl && (

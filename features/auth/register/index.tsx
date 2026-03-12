@@ -2,7 +2,6 @@
 
 import { ReactNode, useMemo } from "react";
 import { Card, CardTitle } from "@/components/ui/card";
-import { useTheme } from "@/hooks/useTheme";
 import { RegisterTypeEnum, RouteEnum, ThemeEnum } from "@/types/enums";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import Rule from "@/components/Rule";
+import { useTheme } from "@/hooks/useTheme";
 
 interface Props {
   children?: ReactNode;
@@ -33,7 +33,6 @@ interface Props {
 }
 
 const RegisterForm = ({ children, type, onSubmit }: Props) => {
-  const { theme } = useTheme();
 
   const {
     handleSubmit,
@@ -67,6 +66,8 @@ const RegisterForm = ({ children, type, onSubmit }: Props) => {
     mode: "onSubmit",
     reValidateMode: "onChange",
   });
+
+  const { theme } = useTheme();
 
   const password = useWatch({
     control,
@@ -438,7 +439,7 @@ const RegisterForm = ({ children, type, onSubmit }: Props) => {
             {type && (
               <Button
                 type="submit"
-                className={`rounded-md px-4 py-2 ${theme === ThemeEnum.DARK ? "text-white" : "text-black"} cursor-pointer bg-cyan-800 hover:bg-cyan-800`}
+                className={`rounded-md px-4 py-2 text-white cursor-pointer bg-cyan-800 hover:bg-cyan-800`}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Please wait.." : "Register"}
@@ -446,11 +447,11 @@ const RegisterForm = ({ children, type, onSubmit }: Props) => {
             )}
           </div>
         </form>
-        <div className="text-sm font-bold flex justify-center text-muted-foreground items-center gap-2">
+        <div className={`text-sm font-bold flex justify-center ${theme === ThemeEnum.DARK ? "text-muted-foreground" : "text-black"}  items-center gap-2`}>
           {" "}
           Already have an account?{" "}
           <Link
-            className=" inline-block text-white hover:underline"
+            className={`inline-block ${theme === ThemeEnum.DARK ? "text-white" : "text-black"} hover:underline`}
             href={RouteEnum.LOGIN}
           >
             {" "}

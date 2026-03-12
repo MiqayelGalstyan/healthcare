@@ -16,6 +16,11 @@ const RegistrationFormWrapper = () => {
 
   const { theme } = useTheme();
 
+  const actualBorderColor =
+    theme === ThemeEnum.DARK
+      ? "border-amber-50 border-2"
+      : "border-amber-600 border-2";
+
   const onSubmit = async (data: IRegisterPayload) => {
     try {
       const formData = {
@@ -62,7 +67,7 @@ const RegistrationFormWrapper = () => {
             <div
               className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
                 currentType === RegisterTypeEnum.PATIENT
-                  ? "border-amber-50 border-2"
+                  ? actualBorderColor
                   : ""
               }`}
               onClick={() => setCurrentType(RegisterTypeEnum.PATIENT)}
@@ -75,7 +80,11 @@ const RegistrationFormWrapper = () => {
               <p className="font-bold text-lg">I am patient</p>
             </div>
             <div
-              className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${currentType === RegisterTypeEnum.DOCTOR ? "border-amber-50 border-2" : ""}`}
+              className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
+                currentType === RegisterTypeEnum.DOCTOR
+                  ? actualBorderColor
+                  : ""
+              }`}
               onClick={() => setCurrentType(RegisterTypeEnum.DOCTOR)}
             >
               <Stethoscope
