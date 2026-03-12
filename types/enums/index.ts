@@ -28,3 +28,11 @@ export enum RegisterTypeEnum {
   PATIENT = "patient",
   DOCTOR = "doctor",
 }
+
+
+export enum AppointmentStatusEnum {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
+}

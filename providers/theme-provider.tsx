@@ -14,14 +14,16 @@ export function ThemeProvider({
   storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<ThemeEnum>(() => {
-    if (typeof window === "undefined") return defaultTheme;
-    const storedTheme = localStorage.getItem(storageKey) as ThemeEnum | null;
-    return (storedTheme as ThemeEnum) ?? defaultTheme;
-  });
+  const [theme, setThemeState] = useState<ThemeEnum>(defaultTheme);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    const stored = localStorage.getItem(storageKey) as ThemeEnum | null;
+    if (stored && Object.values(ThemeEnum).includes(stored)) {
+      setThemeState(stored);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
     const root = window.document.documentElement;
 
     root.classList.remove(ThemeEnum.LIGHT, ThemeEnum.DARK);
@@ -42,9 +44,9 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: ThemeEnum) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    setTheme: (nextTheme: ThemeEnum) => {
+      localStorage.setItem(storageKey, nextTheme);
+      setThemeState(nextTheme);
     },
   };
 

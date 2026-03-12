@@ -1,16 +1,9 @@
 import { ComponentProps } from "react";
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { RoleEnum, RouteEnum } from "@/types/enums";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
-import { LayoutDashboard, Stethoscope, User, Users } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarMenu } from "@/components/ui/sidebar";
+import { AppSidebarItem } from "@/components/AppSidebarItem";
 
 const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
   const session = await getServerSession(authOptions);
@@ -19,24 +12,24 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
   const items: {
     href: string;
     label: string;
-    icon: React.ComponentType<{ className?: string }>;
+    icon: "dashboard" | "stethoscope" | "user" | "users" | "clock9";
   }[] =
     role === RoleEnum.ADMIN
       ? [
           {
             href: RouteEnum.DASHBOARD,
             label: "Dashboard",
-            icon: LayoutDashboard,
+            icon: "dashboard",
           },
           {
             href: `${RouteEnum.ADMIN}/doctors`,
             label: "Doctors",
-            icon: Stethoscope,
+            icon: "stethoscope",
           },
           {
             href: `${RouteEnum.ADMIN}/patients`,
             label: "Patients",
-            icon: Users,
+            icon: "users",
           },
         ]
       : role === RoleEnum.DOCTOR
@@ -44,17 +37,17 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
             {
               href: RouteEnum.DASHBOARD,
               label: "Dashboard",
-              icon: LayoutDashboard,
+              icon: "dashboard",
             },
-            { href: RouteEnum.DOCTOR, label: "Profile", icon: User },
+            { href: RouteEnum.DOCTOR, label: "Working hours (timeslots)", icon: "clock9" },
           ]
         : role === RoleEnum.PATIENT
           ? [
-              { href: RouteEnum.PATIENT, label: "Profile", icon: User },
+              { href: RouteEnum.PATIENT, label: "Profile", icon: "user" },
               {
                 href: `${RouteEnum.PATIENT}/doctors`,
                 label: "Doctors",
-                icon: Stethoscope,
+                icon: "stethoscope",
               },
             ]
           : [];
@@ -64,17 +57,12 @@ const AppSidebar = async ({ ...props }: ComponentProps<typeof Sidebar>) => {
       <SidebarContent>
         <SidebarMenu className="mt-6">
           {items.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild tooltip={item.label}>
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-2 pl-10 group-data-[collapsible=icon]:ml-2 "
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <AppSidebarItem
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+            />
           ))}
         </SidebarMenu>
       </SidebarContent>

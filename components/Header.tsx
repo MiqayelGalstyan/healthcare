@@ -7,11 +7,15 @@ import { RoleEnum, RouteEnum } from "@/types/enums";
 import Logo from "./Logo";
 import Logout from "./Logout";
 import Link from "next/link";
+import { getPublicAvatarUrl } from "@/lib/supabaseStorage";
+import Image from "next/image";
 
 const Header = () => {
   const { data: session } = useSession();
   const role = session?.user.role;
   const showSidebar = role === RoleEnum.ADMIN || role === RoleEnum.DOCTOR;
+
+  const imageUrl = getPublicAvatarUrl(session?.user?.photo)
 
   return (
     <header className="flex h-20 shrink-0 justify-between items-center gap-2 border-b pr-10">
@@ -30,6 +34,15 @@ const Header = () => {
           <p className="text-muted-foreground text-nowrap">
             Hi, {session?.user.firstName}
           </p>
+        )}
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt={session?.user?.firstName ?? 'User'}
+            width={35}
+            height={35}
+            className="rounded-full"
+          />
         )}
         <ThemeSwitcher />
         <Logout />

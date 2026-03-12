@@ -27,6 +27,17 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (pathname.startsWith(RouteEnum.DOCTORS)) {
+    if (!token) {
+      const loginUrl = new URL(RouteEnum.LOGIN, req.url);
+      loginUrl.searchParams.set("next", pathname + search);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (role !== RoleEnum.PATIENT && roleHome) {
+      return NextResponse.redirect(new URL(roleHome, req.url));
+    }
+  }
+
   if (pathname.startsWith(RouteEnum.LOGIN) && token && roleHome) {
     return NextResponse.redirect(new URL(RouteEnum.DASHBOARD, req.url));
   }
@@ -35,7 +46,11 @@ export async function middleware(req: NextRequest) {
     if (pathname.startsWith(RouteEnum.ADMIN) && role !== RoleEnum.ADMIN) {
       return NextResponse.redirect(new URL(roleHome, req.url));
     }
-    if (pathname.startsWith(RouteEnum.DOCTOR) && role !== RoleEnum.DOCTOR) {
+    if (
+      pathname.startsWith(RouteEnum.DOCTOR) &&
+      !pathname.startsWith(RouteEnum.DOCTORS) &&
+      role !== RoleEnum.DOCTOR
+    ) {
       return NextResponse.redirect(new URL(roleHome, req.url));
     }
     if (pathname.startsWith(RouteEnum.PATIENT) && role !== RoleEnum.PATIENT) {
@@ -52,6 +67,8 @@ export const config = {
     "/dashboard/:path*",
     "/admin/:path*",
     "/doctor/:path*",
+    "/doctors",
+    "/doctors/:path*",
     "/patient/:path*",
   ],
 };

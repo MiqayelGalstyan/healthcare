@@ -24,3 +24,6 @@ export const SPECIALITY_VALUES = DOCTOR_SPECIALITIES.map((s) => s.value) as [
   string,
   ...string[],
 ];
+
+
+export const DEFAULT_TIME_SLOTS = { start: "09:00", end: "17:00" };
