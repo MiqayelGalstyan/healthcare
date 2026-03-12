@@ -14,11 +14,12 @@ export function ThemeProvider({
   storageKey = "ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<ThemeEnum>(defaultTheme);
+  const [themeState, setThemeState] = useState<ThemeEnum>(defaultTheme);
 
   useEffect(() => {
     const stored = localStorage.getItem(storageKey) as ThemeEnum | null;
     if (stored && Object.values(ThemeEnum).includes(stored)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setThemeState(stored);
     }
   }, [storageKey]);
@@ -28,7 +29,7 @@ export function ThemeProvider({
 
     root.classList.remove(ThemeEnum.LIGHT, ThemeEnum.DARK);
 
-    if (theme === ThemeEnum.SYSTEM) {
+    if (themeState === ThemeEnum.SYSTEM) {
       const systemTheme = window.matchMedia(
         `(prefers-color-scheme: ${ThemeEnum.DARK})`,
       ).matches
@@ -39,11 +40,11 @@ export function ThemeProvider({
       return;
     }
 
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add(themeState);
+  }, [themeState]);
 
   const value = {
-    theme,
+    theme: themeState,
     setTheme: (nextTheme: ThemeEnum) => {
       localStorage.setItem(storageKey, nextTheme);
       setThemeState(nextTheme);
