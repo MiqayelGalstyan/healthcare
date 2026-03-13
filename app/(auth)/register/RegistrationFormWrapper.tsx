@@ -58,14 +58,14 @@ const RegistrationFormWrapper = () => {
   return (
     <>
       <RegisterForm type={currentType} onSubmit={onSubmit}>
-        <Card className="flex-1 p-7 gap-3">
+        <Card className="flex-1 p-[10px] lg:p-7 gap-3">
           <p className="text-xl font-bold">Who are you?</p>
           <p className="text-sm text-muted-foreground">
             {`You have selected ${currentType} account type`}
           </p>
           <div className="flex justify-between items-center mt-3">
             <div
-              className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
+              className={`p-[10px] lg:p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
                 currentType === RegisterTypeEnum.PATIENT
                   ? actualBorderColor
                   : ""
@@ -75,12 +75,15 @@ const RegistrationFormWrapper = () => {
               <User
                 width={60}
                 height={60}
+                className="w-[30px] h-[30px] lg:w-[60px] lg:h-[60px]"
                 color={theme === ThemeEnum.DARK ? "white" : "black"}
               />
-              <p className="font-bold text-lg">I am patient</p>
+              <p className="text-center font-bold text-xs lg:text-sm xl:text-lg">
+                I am patient
+              </p>
             </div>
             <div
-              className={`p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
+              className={`p-[10px] lg:p-6 border rounded-lg flex flex-col justify-center items-center gap-4 cursor-pointer ${
                 currentType === RegisterTypeEnum.DOCTOR ? actualBorderColor : ""
               }`}
               onClick={() => setCurrentType(RegisterTypeEnum.DOCTOR)}
@@ -88,9 +91,12 @@ const RegistrationFormWrapper = () => {
               <Stethoscope
                 width={60}
                 height={60}
+                className="w-[30px] h-[30px] lg:w-[60px] lg:h-[60px]"
                 color={theme === ThemeEnum.DARK ? "white" : "black"}
               />
-              <p className="font-bold text-lg">I am doctor</p>
+              <p className="text-center font-bold text-xs lg:text-sm xl:text-lg">
+                I am doctor
+              </p>
             </div>
           </div>
         </Card>

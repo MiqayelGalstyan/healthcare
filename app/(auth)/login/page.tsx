@@ -22,7 +22,7 @@ export default async function Login() {
       <Card className="overflow-hidden p-0 w-full max-w-5xl">
         <CardContent className="grid p-0 md:grid-cols-2">
           <LoginForm />
-          <div className="bg-muted flex justify-center items-center min-h-125">
+          <div className="bg-muted hidden md:flex justify-center items-center min-h-[320px]">
             <Image
               src={"/login.png"}
               alt="Logo"

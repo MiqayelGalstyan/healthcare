@@ -3,12 +3,11 @@
 import { ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calendar } from "./ui/calendar";
-import { TimeSlotPicker } from "./TimeSlotPicker";
+import { Calendar } from "@/components/ui/calendar";
+import { TimeSlotPicker } from "@/features/booking/TimeSlotPicker";
 import { Availability } from "@prisma/client";
 import { useTheme } from "@/hooks/useTheme";
-import { ThemeEnum } from "@/types/enums";
-import { RouteEnum } from "@/types/enums";
+import { ThemeEnum, RouteEnum } from "@/types/enums";
 
 interface Props {
   doctorId: string;

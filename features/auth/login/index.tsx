@@ -65,7 +65,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="border-none shadow-none pt-16 pb-16 w-full pl-10 pr-10">
+    <Card className="border-none shadow-none w-full max-w-md mx-auto px-4 py-10 sm:px-6 sm:py-12 md:px-10 md:py-16">
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
       </CardHeader>

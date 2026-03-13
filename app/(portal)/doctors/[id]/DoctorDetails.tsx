@@ -1,7 +1,7 @@
 "use client";
 
 import { Award, GraduationCap, Star } from "lucide-react";
-import { Booking } from "@/components/Booking";
+import { Booking } from "@/features/booking/Booking";
 import { IFoundDoctor } from "@/types/interfaces/doctor";
 import { getPublicAvatarUrl } from "@/lib/supabaseStorage";
 import { Availability } from "@prisma/client";

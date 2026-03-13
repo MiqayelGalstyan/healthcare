@@ -99,7 +99,7 @@ const RegisterForm = ({
   }, [password]);
 
   return (
-    <div className="flex justify-between items-start gap-10">
+    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-10">
       {children}
       <Card className={`flex-2 p-6 ${cardStyles} `}>
         <CardTitle>

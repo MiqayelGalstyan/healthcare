@@ -5,7 +5,7 @@ import { RouteEnum } from "@/types/enums";
 import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { BookingConfirmButton } from "./BookingConfirmButton";
+import { BookingConfirmButton } from "@/features/booking/BookingConfirmButton";
 
 export default async function BookingConfirmationPage({
   params,

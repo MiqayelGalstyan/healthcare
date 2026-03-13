@@ -16,6 +16,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import {
+  EditPatient,
+  type EditPatientFormValues,
+} from "@/components/EditPatient";
 
 type PatientRow = {
   id: string;
@@ -36,6 +40,7 @@ export function AdminPatientsTable({
   const [selectedPatient, setSelectedPatient] = useState<PatientRow | null>(
     null,
   );
+  const [patientToEdit, setPatientToEdit] = useState<PatientRow | null>(null);
 
   const totalDataCount = rows.length;
 
@@ -68,6 +73,23 @@ export function AdminPatientsTable({
   };
 
   const openDeleteDialog = (patient: PatientRow) => setSelectedPatient(patient);
+
+  const handleEditSuccess = (data: EditPatientFormValues) => {
+    if (!patientToEdit) return;
+    setRows((prev) =>
+      prev.map((p) =>
+        p.id === patientToEdit.id
+          ? {
+              ...p,
+              firstName: data.firstName,
+              lastName: data.lastName,
+            }
+          : p,
+      ),
+    );
+    setPatientToEdit(null);
+    toast.success("Patient updated");
+  };
 
   const columns = useMemo<ColumnDef<PatientRow>[]>(
     () => [
@@ -105,14 +127,24 @@ export function AdminPatientsTable({
         id: "actions",
         header: "",
         cell: ({ row }) => (
-          <Button
-            variant="destructive"
-            size="sm"
-            className="cursor-pointer"
-            onClick={() => openDeleteDialog(row.original)}
-          >
-            Delete
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer"
+              onClick={() => setPatientToEdit(row.original)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="cursor-pointer"
+              onClick={() => openDeleteDialog(row.original)}
+            >
+              Delete
+            </Button>
+          </div>
         ),
       },
     ],
@@ -173,6 +205,13 @@ export function AdminPatientsTable({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <EditPatient
+        open={patientToEdit !== null}
+        onOpenChange={(open) => !open && setPatientToEdit(null)}
+        patient={patientToEdit}
+        onSuccess={handleEditSuccess}
+      />
     </>
   );
 }

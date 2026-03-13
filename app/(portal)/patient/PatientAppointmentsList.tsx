@@ -192,7 +192,7 @@ export function PatientAppointmentsList({
           to book one.
         </p>
       ) : (
-        <ul className="grid w-full grid-cols-1 gap-4 justify-items-start items-start sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid w-full grid-cols-1 gap-4 justify-items-stretch items-start lg:grid-cols-2 xl:grid-cols-3">
           {appointments.map((apt) => {
             const doctorName = `${apt.doctor.firstName} ${apt.doctor.lastName}`;
             const specialty = apt.doctor.doctorProfile?.specialty?.name ?? "—";
@@ -213,7 +213,7 @@ export function PatientAppointmentsList({
             const canRate = apt.status === AppointmentStatusEnum.COMPLETED;
 
             return (
-              <li key={apt.id} className="w-full max-w-sm">
+              <li key={apt.id} className="w-full">
                 <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-shadow hover:shadow-md">
                   <div className="flex flex-col sm:flex-row">
                     <div className="h-36 sm:h-auto sm:w-28 flex-shrink-0 bg-muted">
