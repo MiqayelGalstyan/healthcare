@@ -1,21 +1,7 @@
-import type { NextConfig } from "next";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL)
-  : null;
-
+import type { NextConfig } from 'next'
+ 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: supabaseUrl
-      ? [
-          {
-            protocol: "https",
-            hostname: supabaseUrl.hostname,
-            pathname: "/storage/v1/object/public/**",
-          },
-        ]
-      : [],
-  },
-};
-
-export default nextConfig;
+  /* config options here */
+}
+ 
+export default nextConfig
