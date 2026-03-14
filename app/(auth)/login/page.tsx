@@ -9,6 +9,14 @@ import { redirect } from "next/navigation";
 export default async function Login() {
   const session = await getServerSession(authOptions);
 
+  if (session) {
+    redirect(
+      session?.user?.role === RoleEnum.PATIENT
+        ? RouteEnum.PATIENT
+        : RouteEnum.DASHBOARD,
+    );
+  }
+
   return (
     <div className={"flex flex-col justify-center items-center h-dvh gap-6"}>
       <Card className="overflow-hidden p-0 w-full max-w-5xl">

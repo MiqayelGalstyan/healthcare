@@ -39,7 +39,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (pathname.startsWith(RouteEnum.LOGIN) && token && roleHome) {
-    return NextResponse.redirect(new URL(RouteEnum.DASHBOARD, req.url));
+    return NextResponse.redirect(new URL(roleHome, req.url));
   }
 
   if (token && roleHome) {
